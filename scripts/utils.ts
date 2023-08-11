@@ -50,7 +50,7 @@ export async function applyValidatorParameters(rawValidator, params: [any], titl
     // Adding an anonymous function to stringify to resolve the issue with bigint => string conversion
     const appliedValidatorString = JSON.stringify(appliedValidator, (_, v) => typeof v === 'bigint' ? v.toString() : v);
     console.log(appliedValidatorString);
-    await Deno.writeTextFile(title + "_applied_validator.json", appliedValidatorString + "\n", {append:true});
+    await Deno.writeTextFile(title + "_applied_validator.json", appliedValidatorString);
 
     return appliedValidator;
 }
