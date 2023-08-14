@@ -36,5 +36,6 @@ const txHash = await signedTx.submit();
 await lucid.awaitTx(txHash);
 
 console.log(`Successfully withdrew all locked funds from
-lockAddress: ${appliedValidator.lockAddress}
-to address: ${providerAddress}`);
+lockAddress: ${appliedValidator.lockAddress},
+to address: ${providerAddress},
+txHash: ${txHash}`);

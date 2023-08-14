@@ -18,7 +18,7 @@ lucid.selectWalletFromPrivateKey(await Deno.readTextFile("./provider.sk"));
 const providerPubKeyHash = getPublicKeyHash(await Deno.readTextFile("./provider.addr"));
 const distributorPublicKeyHash = getPublicKeyHash(await Deno.readTextFile("./distributor.addr"));
 
-const params = new Constr(0, [providerPubKeyHash, distributorPublicKeyHash, BigInt(1691643728)]);
+const params = new Constr(0, [providerPubKeyHash, distributorPublicKeyHash, BigInt(1692010829000)]);
 
 const appliedValidator = await parseValidatorAndApplyParameters(blueprint.validators, [params], "rewards_distribution.spend");
 

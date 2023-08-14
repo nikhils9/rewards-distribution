@@ -23,10 +23,10 @@ const userAddress = await lucid.wallet.address();
 const tx = await lucid
             .newTx()
             .collectFrom(utxos, rdmr)
-            .payToAddress(userAddress, { lovelace: 15000000n})
+            .payToAddress(userAddress, { lovelace: 10000000n})
             .attachSpendingValidator(appliedValidator.validator)
             .addSigner(await Deno.readTextFile("./distributor.addr"))
-            .validFrom(Date.now() - 60*1000) // Substracting 1 minute from current time to offset diff (blockfrost server time - local system time) 
+            .validFrom(Date.now() - 60*1000) // Substracting 1 minute to offset diff (blockfrost server time - local system time) 
             .validTo(Date.now() + 15*60*1000)
             .complete({ 
                 change: {address: appliedValidator.lockAddress, outputData: {inline: Data.void()}}, 
@@ -41,7 +41,7 @@ const signedTx = await tx
 const txHash = await signedTx.submit();
 await lucid.awaitTx(txHash);
 
-console.log(`Successfully distribute 10 ADA reward from
+console.log(`Successfully distributed 10 ADA reward from
 lockAddress: ${appliedValidator.lockAddress},
-userAddress: ${userAddress},
+to userAddress: ${userAddress},
 txHash: ${txHash}`);
