@@ -8,7 +8,7 @@ pub type Params {
   /// PubKeyHash of the address that distributes the locked funds as rewards
   distributor: Hash<Blake2b_224, VerificationKey>,
   /// Time until the provider cannot withdraw funds from the contract
-  lock_until: POSIXTime
+  lock_until: POSIXTime,
 }
 
 /// Custom Redeemer type
@@ -17,7 +17,8 @@ pub type Action {
   Withdraw
 }
 
-pub type POSIXTime = Int
+pub type POSIXTime =
+  Int
 
 test sum() {
   1 + 1 == 2
