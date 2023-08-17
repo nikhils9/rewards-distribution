@@ -1,15 +1,33 @@
-import { NETWORK } from "./constants.ts";
+import { NETWORK, CREDENTIALS_PATH } from "./constants.ts";
 import { AppliedValidator } from "./types.ts";
 import {
     applyParamsToScript,
     applyDoubleCborEncoding,
-    Lucid
+    Lucid,
+    UTxO,
+    Assets,
+    addAssets
 } from "lucid";
 
 const lucid = await Lucid.new(undefined, NETWORK);
 
+export async function getCredential(fileName: string, filePath?: string) {
+    let path = CREDENTIALS_PATH;
+    
+    if(filePath)
+        path = filePath;
+
+    return Deno.readTextFile(path + fileName);
+}
+
 export function getPublicKeyHash(address: string) {
     return lucid.utils.getAddressDetails(address).paymentCredential?.hash;
+}
+
+export function sumUtxos(utxos: UTxO[]): Assets {
+    return utxos
+            .map((utxo) => utxo.assets)
+            .reduce((acc, assets) => addAssets(acc, assets), {});
 }
 
 export async function parseValidator(validators, title: string) : Promise<any> {
@@ -47,10 +65,14 @@ export async function applyValidatorParameters(rawValidator, params: [any], titl
         params: params
     }
 
-    // Adding an anonymous function to stringify to resolve the issue with bigint => string conversion
-    const appliedValidatorString = JSON.stringify(appliedValidator, (_, v) => typeof v === 'bigint' ? v.toString() : v);
+    const appliedValidatorString = JSON.stringify(appliedValidator, bigIntReplacer);
     console.log(appliedValidatorString);
     await Deno.writeTextFile(title + "_applied_validator.json", appliedValidatorString);
 
     return appliedValidator;
+}
+
+// Parameter to 'JSON.stringify()' to help with bigint conversion
+export function bigIntReplacer(k, v){
+    return typeof v === 'bigint' ? v.toString() : v;
 }
